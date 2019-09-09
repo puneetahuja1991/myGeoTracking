@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">myGeoTrackingApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="txt_title_my_tasks">MY TASKS</string>
+    <string name="tab_title_pending_task">Pending</string>
+    <string name="tab_title_done_task">Done</string>
+</resources>
