@@ -1,4 +1,4 @@
-package com.abaqustest.mygeotrackingapp.utils;
+package com.abaqustest.mygeotrackingapp.utils.helper;
 
 /**
  * The interface Generic response listener.

@@ -1,28 +1,27 @@
 package com.abaqustest.mygeotrackingapp.view.fragment;
 
-import android.os.Bundle;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
-import com.abaqustest.mygeotrackingapp.databinding.LayoutTasksFragmentBinding;
-import com.abaqustest.mygeotrackingapp.model.Tasks;
+import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
+import com.abaqustest.mygeotrackingapp.model.Task;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
 
 import java.util.List;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * The type Done task fragment.
  *
  * @author Puneet Ahuja
  */
-public class DoneTaskFragment extends BaseFragment<LayoutTasksFragmentBinding> {
+public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding>{
 
     private MainViewModel mainViewModel;
+    private TasksAdapter doneTasksAdapter;
 
     /**
      * New instance done tasks fragment.
@@ -34,16 +33,11 @@ public class DoneTaskFragment extends BaseFragment<LayoutTasksFragmentBinding> {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupViewModel();
-    }
 
     @Override
     protected void onBindingDone() {
+        setupViewModel();
         initObservers();
-        mainViewModel.getTasks();
     }
 
     /**
@@ -57,7 +51,7 @@ public class DoneTaskFragment extends BaseFragment<LayoutTasksFragmentBinding> {
      * Init observers.
      */
     private void initObservers() {
-        // mainViewModel.getContactsMutableLiveData().observe(this, contacts -> setUpDoneTasksAdapter(contacts));
+         mainViewModel.getDoneTasksMutableLiveData().observe(this, tasks -> setUpDoneTasksAdapter(tasks));
     }
 
     /**
@@ -65,8 +59,8 @@ public class DoneTaskFragment extends BaseFragment<LayoutTasksFragmentBinding> {
      *
      * @param doneTasks
      */
-    private void setUpDoneTasksAdapter(List<Tasks> doneTasks) {
-        TasksAdapter doneTasksAdapter = new TasksAdapter(doneTasks);
+    private void setUpDoneTasksAdapter(List<Task> doneTasks) {
+        doneTasksAdapter = new TasksAdapter(doneTasks);
         mBinding.rvTasks.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBinding.rvTasks.setAdapter(doneTasksAdapter);
@@ -76,6 +70,6 @@ public class DoneTaskFragment extends BaseFragment<LayoutTasksFragmentBinding> {
 
     @Override
     protected int getResourceLayout() {
-        return R.layout.layout_tasks_fragment;
+        return R.layout.layout_done_task_fragment;
     }
 }

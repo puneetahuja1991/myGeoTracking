@@ -12,11 +12,9 @@ import androidx.databinding.ViewDataBinding;
  * Base activity.
  *
  * @param <T> the type parameter
- *
  * @author Puneet Ahuja
  */
 public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
-
 
     protected T mBinding;
     private ProgressDialog mProgressDialog;
@@ -58,6 +56,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
             mProgressDialog.show();
         }
     }
+
     /**
      * Hide dialog.
      */

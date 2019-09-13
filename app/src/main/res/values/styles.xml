@@ -8,10 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeSplitBackground">@color/colorPrimary</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:textSize">@dimen/_11ssp</item>
+        <item name="android:textColor">@color/colorLightBlack</item>
+        <item name="boxStrokeColor">@color/colorBoxStroke</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">1dp</item>
+        <item name="boxCornerRadiusBottomStart">1dp</item>
+        <item name="boxCornerRadiusTopEnd">1dp</item>
+        <item name="boxCornerRadiusTopStart">1dp</item>
+    </style>
+
+    <style name="DesignError" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">@dimen/_9ssp</item>
+        <item name="android:textColor">@color/colorDarkRed</item>
+        <item name="boxStrokeColor">@color/colorDarkRed</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+    <style name="HintText" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/_11ssp</item>
+        <item name="android:textColor">@color/colorLightBlack</item>
+        <item name="android:textColorHint">@color/colorLightBlack</item>
+    </style>
+    <style name="AlertDialogTitel" parent="Theme.AppCompat.Light.Dialog.Alert"/>
 </resources>

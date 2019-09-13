@@ -3,7 +3,6 @@ package com.abaqustest.mygeotrackingapp.network;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -58,22 +57,6 @@ public class RestClient {
                 .addInterceptor(httpLoggingInterceptor())
                 .build();
     }
-
-
-    /**
-     * Url and header interceptor interceptor.
-     *
-     * @return the interceptor
-     */
-    private Interceptor urlAndHeaderInterceptor() {
-        return chain -> {
-            Request request = chain.request();
-            Request.Builder builder = request.newBuilder()
-                    .addHeader("Content-Type","application/x-www-form-urlencoded");
-            return chain.proceed(builder.build());
-        };
-    }
-
 
     /**
      * Http logging interceptor interceptor.

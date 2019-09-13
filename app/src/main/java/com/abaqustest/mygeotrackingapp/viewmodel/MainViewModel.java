@@ -1,15 +1,17 @@
 package com.abaqustest.mygeotrackingapp.viewmodel;
 
 import android.app.Application;
+import android.widget.Toast;
 
-import com.abaqustest.mygeotrackingapp.model.Tasks;
+import com.abaqustest.mygeotrackingapp.base.BaseViewModel;
+import com.abaqustest.mygeotrackingapp.model.Task;
 import com.abaqustest.mygeotrackingapp.repository.TasksRepository;
-import com.abaqustest.mygeotrackingapp.utils.GenericResponseListener;
+import com.abaqustest.mygeotrackingapp.utils.helper.GenericResponseListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 /**
@@ -17,11 +19,11 @@ import androidx.lifecycle.MutableLiveData;
  *
  * @author Puneet Ahuja
  */
-public class MainViewModel extends AndroidViewModel {
-
+public class MainViewModel extends BaseViewModel {
 
     private TasksRepository mTaskRepository;
-    private MutableLiveData<List<Tasks>> tasksMutableLiveData;
+    private MutableLiveData<List<Task>> pendingTasksMutableLiveData;
+    private MutableLiveData<List<Task>> doneTasksMutableLiveData;
 
     /**
      * Instantiates a new Main view model.
@@ -38,31 +40,61 @@ public class MainViewModel extends AndroidViewModel {
      */
     private void init() {
         mTaskRepository = new TasksRepository();
-        tasksMutableLiveData = new MutableLiveData<>();
+        pendingTasksMutableLiveData = new MutableLiveData<>();
+        doneTasksMutableLiveData = new MutableLiveData<>();
     }
 
     /**
-     * Gets tasks mutable live data.
-     *
-     * @return the tasks mutable live data
-     */
-    public MutableLiveData<List<Tasks>> getTasksMutableLiveData() {
-        return tasksMutableLiveData;
-    }
-
-    /**
-     * Get Tasks.
+     * Get Task.
      */
     public void getTasks(){
-        mTaskRepository.getTaskList(new GenericResponseListener<Tasks>() {
+        isLoading.setValue(true);
+        mTaskRepository.getTaskList(new GenericResponseListener<List<Task>>() {
             @Override
             public void onError(String error) {
-                //handle the error here. As of now this is not required. Becuase Json is static.
+                isLoading.setValue(false);
+                Toast.makeText(getApplication(),error,Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onSuccess(Tasks response) {
+            public void onSuccess(List<Task> response) {
+                isLoading.setValue(false);
+                if(response!=null && response.size()>0)
+                    getPendingTaskList(response);
             }
         });
+    }
+
+    private void getPendingTaskList(List<Task> response) {
+        List<Task> pendingTask=new ArrayList<>();
+        List<Task> doneTask=new ArrayList<>();
+
+        for(int i=0; i<response.size();i++) {
+            if(response.get(i).getState()==0) {
+                pendingTask.add(response.get(i));
+            }else if(response.get(i).getState()==1) {
+                doneTask.add(response.get(i));
+            }
+        }
+        pendingTasksMutableLiveData.setValue(pendingTask);
+        doneTasksMutableLiveData.setValue(doneTask);
+    }
+
+    /**
+     * Gets pending tasks mutable live data.
+     *
+     * @return the pending tasks mutable live data
+     */
+    public MutableLiveData<List<Task>> getPendingTasksMutableLiveData() {
+        return pendingTasksMutableLiveData;
+    }
+
+    /**
+     * Gets done tasks mutable live data.
+     *
+     * @return the done tasks mutable live data
+     */
+    public MutableLiveData<List<Task>> getDoneTasksMutableLiveData() {
+        return doneTasksMutableLiveData;
     }
 }

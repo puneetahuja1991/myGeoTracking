@@ -25,6 +25,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_title_pending_task, R.string.tab_title_done_task};
     private final Context mContext;
 
+    /**
+     * Instantiates a new Sections pager adapter.
+     *
+     * @param context the context
+     * @param fm      the fm
+     */
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;

@@ -1,42 +1,46 @@
 package com.abaqustest.mygeotrackingapp.view.activity;
 
-import android.view.View;
-
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseActivity;
 import com.abaqustest.mygeotrackingapp.databinding.ActivityMainBinding;
 import com.abaqustest.mygeotrackingapp.view.adapter.SectionsPagerAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * The type Main activity.
  *
  * @author Puneet Ahuja
  */
-public class MainActivity  extends BaseActivity<ActivityMainBinding> {
+public class MainActivity  extends BaseActivity<ActivityMainBinding> implements SwipeRefreshLayout.OnRefreshListener {
+
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onBindingDone() {
+        setupViewModel();
         setupToolBar();
         setupTabBar();
-        //setupFloatingButton();
+        mainViewModel.getTasks();
+        mBinding.pullToRefresh.setOnRefreshListener(this);
     }
-  /*  *//**
-     *  Method to set floating button
-     *//*
-    private void setupFloatingButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }*/
+
+    /**
+     * Sets view model.
+     */
+    private void setupViewModel() {
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+    }
+
+    @Override
+    public void onRefresh() {
+        mainViewModel.getTasks();
+        mBinding.pullToRefresh.setRefreshing(false);
+    }
+
     /**
      *  Method to set tab bar
      */

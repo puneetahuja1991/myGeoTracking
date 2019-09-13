@@ -2,14 +2,15 @@ package com.abaqustest.mygeotrackingapp;
 
 import android.app.Application;
 import android.content.Context;
+import androidx.appcompat.app.AppCompatDelegate;
 
 
 /**
- * The My application class.
+ * The type Contact application class.
  *
  * @author Puneet Ahuja
  */
-public class MyApplication extends Application {
+public class MyGeoTrackingApplication extends Application {
 
     private static Context appContext;
 
@@ -27,6 +28,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appContext = getApplicationContext();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
