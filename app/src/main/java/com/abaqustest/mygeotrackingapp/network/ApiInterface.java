@@ -1,7 +1,7 @@
 package com.abaqustest.mygeotrackingapp.network;
 
 
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;

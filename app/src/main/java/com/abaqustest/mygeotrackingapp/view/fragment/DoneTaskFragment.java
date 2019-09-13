@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
 

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.databinding.ItemTasksBinding;
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.view.viewholder.TasksViewHolder;
 
 import java.util.List;

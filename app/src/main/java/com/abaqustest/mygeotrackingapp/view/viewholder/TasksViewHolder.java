@@ -1,7 +1,7 @@
 package com.abaqustest.mygeotrackingapp.view.viewholder;
 
 import com.abaqustest.mygeotrackingapp.databinding.ItemTasksBinding;
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 
 import androidx.recyclerview.widget.RecyclerView;
 

@@ -24,6 +24,7 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
         setupViewModel();
         setupToolBar();
         setupTabBar();
+        initObservers();
         mainViewModel.getTasks();
         mBinding.pullToRefresh.setOnRefreshListener(this);
     }
@@ -48,6 +49,18 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         mBinding.viewPager.setAdapter(sectionsPagerAdapter);
         mBinding.tabs.setupWithViewPager(mBinding.viewPager);
+    }
+
+    /**
+     * Init observers.
+     */
+    private void initObservers() {
+        mainViewModel.getIsLoading().observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean)
+                showDialog("Loading....");
+            else
+                hideDialog();
+        });
     }
 
     /**

@@ -6,7 +6,7 @@
 
         <variable
             name="tasks"
-            type="com.abaqustest.mygeotrackingapp.model.Task" />
+            type="com.abaqustest.mygeotrackingapp.database.Task" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"

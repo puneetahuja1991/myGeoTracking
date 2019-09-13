@@ -4,7 +4,7 @@ import android.app.Application;
 import android.widget.Toast;
 
 import com.abaqustest.mygeotrackingapp.base.BaseViewModel;
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.repository.TasksRepository;
 import com.abaqustest.mygeotrackingapp.utils.helper.GenericResponseListener;
 
@@ -60,12 +60,17 @@ public class MainViewModel extends BaseViewModel {
             public void onSuccess(List<Task> response) {
                 isLoading.setValue(false);
                 if(response!=null && response.size()>0)
-                    getPendingTaskList(response);
+                    populateTasks(response);
             }
         });
     }
 
-    private void getPendingTaskList(List<Task> response) {
+    /**
+     * Populate tasks.
+     *
+     * @param response the response
+     */
+    private void populateTasks(List<Task> response) {
         List<Task> pendingTask=new ArrayList<>();
         List<Task> doneTask=new ArrayList<>();
 

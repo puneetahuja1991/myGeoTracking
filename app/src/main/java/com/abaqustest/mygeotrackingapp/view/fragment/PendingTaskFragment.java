@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutTasksFragmentBinding;
-import com.abaqustest.mygeotrackingapp.model.Task;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.utils.Utils;
 import com.abaqustest.mygeotrackingapp.utils.helper.DividerItemsDecoration;
 import com.abaqustest.mygeotrackingapp.utils.helper.RecyclerItemClickListener;
@@ -77,12 +77,6 @@ public class PendingTaskFragment extends BaseFragment<LayoutTasksFragmentBinding
      */
     private void initObservers() {
         mainViewModel.getPendingTasksMutableLiveData().observe(this, tasks -> setUpPendingTasksAdapter(tasks));
-        mainViewModel.getIsLoading().observe(this, aBoolean -> {
-            if (aBoolean != null && aBoolean)
-                showDialog("Loading....");
-            else
-                hideDialog();
-        });
     }
 
     /**
@@ -185,7 +179,7 @@ public class PendingTaskFragment extends BaseFragment<LayoutTasksFragmentBinding
                         // Undo delete operation
                     }
                 })
-                .setDuration(5000)
+                .setDuration(2000)
                 .setActionTextColor(getResources().getColor(R.color.colorAccent))
                 .show();
     }
