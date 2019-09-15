@@ -57,7 +57,7 @@
                         android:inputType="textEmailAddress"
                         android:text="@={addNewTaskViewModel.addNewTaskForm.newTaskFields.taskName}"
                         android:textAlignment="viewStart"
-                        app:onFocus="@{addNewTaskViewModel.getOnFocusTaskName()}" />
+                        app:onFocus="@{addNewTaskViewModel.addNewTaskForm.getOnFocusTaskName()}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout

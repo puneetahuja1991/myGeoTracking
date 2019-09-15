@@ -1,6 +1,5 @@
 package com.abaqustest.mygeotrackingapp.database;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,9 +12,8 @@ import java.io.Serializable;
  */
 @Entity
 public class Task implements Serializable {
-    @PrimaryKey
-    @NonNull
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String task;
     private int state;
 
@@ -24,7 +22,7 @@ public class Task implements Serializable {
      *
      * @return the id
      */
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -52,7 +50,7 @@ public class Task implements Serializable {
      *
      * @param id the id
      */
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

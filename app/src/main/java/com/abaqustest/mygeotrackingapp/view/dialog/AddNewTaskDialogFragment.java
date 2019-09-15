@@ -5,13 +5,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutDialogAddNewTaskBinding;
+import com.abaqustest.mygeotrackingapp.model.AddNewTaskFields;
 import com.abaqustest.mygeotrackingapp.viewmodel.AddNewTaskViewModel;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 /**
@@ -83,9 +86,10 @@ public class AddNewTaskDialogFragment extends DialogFragment implements View.OnC
      * Sets observers.
      */
     private void setupObservers() {
-        addNewTaskViewModel.getError().observe(this, s -> {
-            dialog.dismiss();
-
+        addNewTaskViewModel.getAddNewTaskForm().getNewTaskFieldsMutableLiveData().observe(this, addNewTaskFields -> {
+            addNewTaskViewModel.addTask(addNewTaskFields);
+            Toast.makeText(getContext(),"Task has been created",Toast.LENGTH_SHORT).show();
+            dismiss();
         });
     }
 

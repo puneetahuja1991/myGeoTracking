@@ -1,5 +1,8 @@
 package com.abaqustest.mygeotrackingapp.view.fragment;
 
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +11,8 @@ import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
 import com.abaqustest.mygeotrackingapp.database.Task;
+import com.abaqustest.mygeotrackingapp.utils.helper.RecyclerItemClickListener;
+import com.abaqustest.mygeotrackingapp.view.activity.MainActivity;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
 
@@ -18,7 +23,7 @@ import java.util.List;
  *
  * @author Puneet Ahuja
  */
-public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding>{
+public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding> implements TasksAdapter.TasksAdapterListener {
 
     private MainViewModel mainViewModel;
     private TasksAdapter doneTasksAdapter;
@@ -60,16 +65,21 @@ public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding
      * @param doneTasks
      */
     private void setUpDoneTasksAdapter(List<Task> doneTasks) {
-        doneTasksAdapter = new TasksAdapter(doneTasks);
+        doneTasksAdapter = new TasksAdapter(doneTasks,this);
         mBinding.rvTasks.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mBinding.rvTasks.setAdapter(doneTasksAdapter);
         mBinding.rvTasks.setLayoutManager(layoutManager);
-
     }
 
     @Override
     protected int getResourceLayout() {
         return R.layout.layout_done_task_fragment;
+    }
+
+    @Override
+    public void deleteTask(Task task) {
+        mainViewModel.deleteTask(task);
+        Toast.makeText(getContext(),"Task has been deleted",Toast.LENGTH_SHORT).show();
     }
 }

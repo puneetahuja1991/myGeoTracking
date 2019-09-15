@@ -2,13 +2,17 @@ package com.abaqustest.mygeotrackingapp.view.activity;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseActivity;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.databinding.ActivityMainBinding;
 import com.abaqustest.mygeotrackingapp.view.adapter.SectionsPagerAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.List;
 
 /**
  * The type Main activity.
@@ -25,8 +29,8 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
         setupToolBar();
         setupTabBar();
         initObservers();
-        mainViewModel.getTasks();
         mBinding.pullToRefresh.setOnRefreshListener(this);
+        mainViewModel.getTasks(false);
     }
 
     /**
@@ -38,7 +42,7 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
 
     @Override
     public void onRefresh() {
-        mainViewModel.getTasks();
+        mainViewModel.getTasks(true);
         mBinding.pullToRefresh.setRefreshing(false);
     }
 
@@ -60,6 +64,12 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
                 showDialog("Loading....");
             else
                 hideDialog();
+        });
+
+        mainViewModel.getTaskLiveData().observe(this, tasks -> {
+            if(tasks != null && tasks.size() > 0)
+                mainViewModel.populateTasks(tasks);
+
         });
     }
 

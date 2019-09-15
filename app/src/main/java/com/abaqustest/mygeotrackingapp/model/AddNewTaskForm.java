@@ -1,13 +1,16 @@
 package com.abaqustest.mygeotrackingapp.model;
 
 import android.text.TextUtils;
+import android.view.View;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.lifecycle.MutableLiveData;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.utils.Utils;
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * The type Add new task form.
@@ -18,7 +21,8 @@ public class AddNewTaskForm extends BaseObservable {
 
     private AddNewTaskFields newTaskFields;
     private AddNewTaskErrorFields newTaskErrorFields;
-
+    private View.OnFocusChangeListener onFocusTaskName;
+    private MutableLiveData<AddNewTaskFields> newTaskFieldsMutableLiveData;
 
     /**
      * Instantiates a new Add new task form.
@@ -26,6 +30,15 @@ public class AddNewTaskForm extends BaseObservable {
     public AddNewTaskForm() {
         newTaskFields = new AddNewTaskFields();
         newTaskErrorFields = new AddNewTaskErrorFields();
+        newTaskFieldsMutableLiveData = new MutableLiveData<>();
+        onFocusTaskName = (view, focused) -> {
+            TextInputEditText et = (TextInputEditText) view;
+            if (et.getText().length() > 0 && !focused) {
+                isValidTaskName(false);
+            } else if (!focused) {
+                isValidTaskName(true);
+            }
+        };
     }
 
     /**
@@ -33,8 +46,17 @@ public class AddNewTaskForm extends BaseObservable {
      */
     public void onClick() {
         if (isValid()) {
-            //set value in mutable live data & observe in view
+            newTaskFieldsMutableLiveData.setValue(newTaskFields);
         }
+    }
+
+    /**
+     * Gets new task fields mutable live data.
+     *
+     * @return the new task fields mutable live data
+     */
+    public MutableLiveData<AddNewTaskFields> getNewTaskFieldsMutableLiveData() {
+        return newTaskFieldsMutableLiveData;
     }
 
     /**
@@ -103,5 +125,14 @@ public class AddNewTaskForm extends BaseObservable {
     @Bindable
     public Integer getTaskNameError() {
         return newTaskErrorFields.getTaskNameError();
+    }
+
+    /**
+     * Gets on focus task name.
+     *
+     * @return the on focus task name
+     */
+    public View.OnFocusChangeListener getOnFocusTaskName() {
+        return onFocusTaskName;
     }
 }

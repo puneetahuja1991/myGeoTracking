@@ -1,13 +1,13 @@
 package com.abaqustest.mygeotrackingapp.viewmodel;
 
 import android.app.Application;
-import android.view.View;
-
-import com.abaqustest.mygeotrackingapp.base.BaseViewModel;
-import com.abaqustest.mygeotrackingapp.model.AddNewTaskForm;
-import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.annotation.NonNull;
+
+import com.abaqustest.mygeotrackingapp.base.BaseViewModel;
+import com.abaqustest.mygeotrackingapp.model.AddNewTaskFields;
+import com.abaqustest.mygeotrackingapp.model.AddNewTaskForm;
+import com.abaqustest.mygeotrackingapp.repository.TasksRepository;
 
 /**
  * The type Add new task view model.
@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
  */
 public class AddNewTaskViewModel extends BaseViewModel {
 
-    private View.OnFocusChangeListener onFocusTaskName;
     private AddNewTaskForm addNewTaskForm;
+    private TasksRepository tasksRepository;
 
     /**
      * Instantiates a new Add new task view model.
@@ -34,14 +34,7 @@ public class AddNewTaskViewModel extends BaseViewModel {
      */
     private void init() {
         addNewTaskForm = new AddNewTaskForm();
-        onFocusTaskName = (view, focused) -> {
-            TextInputEditText et = (TextInputEditText) view;
-            if (et.getText().length() > 0 && !focused) {
-                addNewTaskForm.isValidTaskName(false);
-            } else if (!focused) {
-                addNewTaskForm.isValidTaskName(true);
-            }
-        };
+        tasksRepository = new TasksRepository();
     }
 
     /**
@@ -50,6 +43,7 @@ public class AddNewTaskViewModel extends BaseViewModel {
     public void onAddNewTaskClicked() {
         addNewTaskForm.onClick();
     }
+
 
     /**
      * Gets add new task form.
@@ -61,11 +55,11 @@ public class AddNewTaskViewModel extends BaseViewModel {
     }
 
     /**
-     * Gets on focus task name.
+     * Add task.
      *
-     * @return the on focus task name
+     * @param addNewTaskFields the add new task fields
      */
-    public View.OnFocusChangeListener getOnFocusTaskName() {
-        return onFocusTaskName;
+    public void addTask(AddNewTaskFields addNewTaskFields) {
+        tasksRepository.insertTaskToDb(addNewTaskFields.getTaskName());
     }
 }

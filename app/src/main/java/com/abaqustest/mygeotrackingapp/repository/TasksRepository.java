@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,10 +42,14 @@ public class TasksRepository {
     /**
      * Gets Task list.
      *
-     * @param listener the listener
+     * @param listener            the listener
+     * @param isRefreshForcefully the is refresh forcefully
      */
-    public void getTaskList( @NonNull GenericResponseListener<List<Task>> listener) {
-        fetchTasks(listener);
+    public void getTaskList(@NonNull GenericResponseListener<List<Task>> listener, boolean isRefreshForcefully) {
+        if(isRefreshForcefully)
+            getTaskFromServer(listener);
+        else
+            fetchTasks(listener);
     }
 
     /**
@@ -58,7 +64,7 @@ public class TasksRepository {
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 if(response.isSuccessful()){
                     listener.onSuccess(response.body());
-                    insertTasks(response.body());
+                    deleteTasks(response.body());
                 }else {
                     try {
                         JSONObject errorObject  = new JSONObject(response.errorBody().string());
@@ -88,7 +94,7 @@ public class TasksRepository {
      *
      * @param task the message
      */
-    public void insertTask(final Task task) {
+    public void insertTask(Task task) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -98,12 +104,38 @@ public class TasksRepository {
         }.execute();
     }
 
-    public void insertTasks(List<Task> tasks) {
+    /**
+     * Insert tasks.
+     *
+     * @param tasks the tasks
+     */
+    private void insertTasks(List<Task> tasks) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 tasksDatabase.daoAccess().insertTasks(tasks);
                 return null;
+            }
+        }.execute();
+    }
+
+    /**
+     * Delete tasks.
+     *
+     * @param tasks the tasks
+     */
+    private void deleteTasks(List<Task> tasks) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                tasksDatabase.clearAllTables();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                insertTasks(tasks);
             }
         }.execute();
     }
@@ -141,7 +173,7 @@ public class TasksRepository {
         new AsyncTask<Void, Void, List<Task>>() {
             @Override
             protected List<Task> doInBackground(Void... voids) {
-                List<Task> tasks= tasksDatabase.daoAccess().fetchAllTasks();
+                List<Task> tasks= tasksDatabase.daoAccess().fetchAllTasks().getValue();
                 return tasks;
             }
 
@@ -155,6 +187,40 @@ public class TasksRepository {
     }
 
 
+    /**
+     * Insert task to db.
+     *
+     * @param taskName the task name
+     */
+    public void insertTaskToDb(String taskName) {
+        Task task = new Task();
+        task.setState(0);
+        task.setTask(taskName);
+        insertTask(task);
+    }
 
+    /**
+     * Get tasks live data live data.
+     *
+     * @return the live data
+     */
+    public LiveData<List<Task>> getTasksLiveData(){
+        return tasksDatabase.daoAccess().fetchAllTasks();
+    }
+
+    /**
+     * Delete task.
+     *
+     * @param task the task
+     */
+    public void deleteTask(Task task) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                tasksDatabase.daoAccess().deleteTask(task);
+                return null;
+            }
+        }.execute();
+    }
 
 }
