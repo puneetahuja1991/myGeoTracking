@@ -2,7 +2,9 @@ package com.abaqustest.mygeotrackingapp.worker;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Build;
 
@@ -15,6 +17,7 @@ import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.repository.TasksRepository;
 import com.abaqustest.mygeotrackingapp.utils.helper.GenericResponseListener;
+import com.abaqustest.mygeotrackingapp.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,16 @@ public class TaskWorker extends Worker {
      */
     private void showNotification(List<Task> response) {
 
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        final PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        getApplicationContext(),
+                        (int) System.currentTimeMillis(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
         NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         String title = "Task Status";
@@ -85,6 +98,7 @@ public class TaskWorker extends Worker {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setContentIntent(resultPendingIntent)
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSmallIcon(R.mipmap.ic_launcher);

@@ -50,7 +50,7 @@ public class MyGeoTrackingApplication extends Application {
      */
     private void setUpTaskWorkerThread() {
         periodicWorkRequest = new PeriodicWorkRequest.Builder(TaskWorker.class, 15, TimeUnit.MINUTES)
-                //.setInitialDelay(15,TimeUnit.MINUTES)
+                .setInitialDelay(15,TimeUnit.MINUTES)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork("my_task_work", ExistingPeriodicWorkPolicy.KEEP,periodicWorkRequest);
     }
