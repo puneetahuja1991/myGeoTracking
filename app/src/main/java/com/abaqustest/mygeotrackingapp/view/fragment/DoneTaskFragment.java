@@ -1,6 +1,5 @@
 package com.abaqustest.mygeotrackingapp.view.fragment;
 
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -9,9 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
-import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
 import com.abaqustest.mygeotrackingapp.database.Task;
-import com.abaqustest.mygeotrackingapp.utils.helper.RecyclerItemClickListener;
+import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
 import com.abaqustest.mygeotrackingapp.view.activity.MainActivity;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
@@ -81,5 +79,10 @@ public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding
     public void deleteTask(Task task) {
         mainViewModel.deleteTask(task);
         Toast.makeText(getContext(),"Task has been deleted",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        mainViewModel.updateTask(task);
     }
 }

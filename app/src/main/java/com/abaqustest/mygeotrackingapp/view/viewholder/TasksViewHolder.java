@@ -44,6 +44,14 @@ public class TasksViewHolder extends RecyclerView.ViewHolder{
             }
             return false;
         });
+
+        itemView.setOnClickListener(view -> {
+            if(mTask.getState() == 0)
+                mTask.setState(1);
+            else
+                mTask.setState(0);
+            mListener.updateTask(mTask);
+        });
     }
 
 

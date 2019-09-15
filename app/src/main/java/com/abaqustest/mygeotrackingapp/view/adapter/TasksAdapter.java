@@ -29,6 +29,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
      * Instantiates a new pending tasks adapter.
      *
      * @param pendingTasks the pendingTasks
+     * @param listener     the listener
      */
     public TasksAdapter(List<Task> pendingTasks, TasksAdapterListener listener) {
         this.mTasks = pendingTasks;
@@ -75,7 +76,19 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
      * The interface Tasks adapter listner.
      */
     public interface TasksAdapterListener {
+        /**
+         * Delete task.
+         *
+         * @param task the task
+         */
         void deleteTask(Task task);
+
+        /**
+         * Update task.
+         *
+         * @param task the task
+         */
+        void updateTask(Task task);
     }
 
 }

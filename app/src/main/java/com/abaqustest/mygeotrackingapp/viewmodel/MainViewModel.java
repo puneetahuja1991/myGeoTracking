@@ -121,4 +121,13 @@ public class MainViewModel extends BaseViewModel {
     public void deleteTask(Task task) {
         mTaskRepository.deleteTask(task);
     }
+
+    /**
+     * Update task.
+     *
+     * @param task the task
+     */
+    public void updateTask(Task task) {
+        mTaskRepository.updateTask(task);
+    }
 }

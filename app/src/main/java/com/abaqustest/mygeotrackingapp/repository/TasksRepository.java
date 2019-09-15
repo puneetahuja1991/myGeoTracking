@@ -223,4 +223,18 @@ public class TasksRepository {
         }.execute();
     }
 
+    /**
+     * Update task.
+     *
+     * @param task the task
+     */
+    public void updateTask(Task task) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                tasksDatabase.daoAccess().updateTask(task);
+                return null;
+            }
+        }.execute();
+    }
 }

@@ -1,18 +1,17 @@
 package com.abaqustest.mygeotrackingapp.view.activity;
 
-import com.abaqustest.mygeotrackingapp.R;
-import com.abaqustest.mygeotrackingapp.base.BaseActivity;
-import com.abaqustest.mygeotrackingapp.database.Task;
-import com.abaqustest.mygeotrackingapp.databinding.ActivityMainBinding;
-import com.abaqustest.mygeotrackingapp.view.adapter.SectionsPagerAdapter;
-import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
+import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.List;
+import com.abaqustest.mygeotrackingapp.R;
+import com.abaqustest.mygeotrackingapp.base.BaseActivity;
+import com.abaqustest.mygeotrackingapp.databinding.ActivityMainBinding;
+import com.abaqustest.mygeotrackingapp.view.adapter.SectionsPagerAdapter;
+import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * The type Main activity.
@@ -87,5 +86,23 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
     @Override
     protected int getResourceLayout() {
         return R.layout.activity_main;
+    }
+
+    /**
+     * Show undo delete message.
+     *
+     * @param view the view
+     */
+    public void showUndoDeleteMessage(View view) {
+        Snackbar.make(view, "Task Updated", Snackbar.LENGTH_SHORT)
+                .setAction("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Undo delete operation
+                    }
+                })
+                .setDuration(5000)
+                .setActionTextColor(getResources().getColor(R.color.colorAccent))
+                .show();
     }
 }
