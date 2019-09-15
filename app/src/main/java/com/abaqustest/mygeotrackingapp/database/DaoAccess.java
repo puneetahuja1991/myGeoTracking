@@ -27,6 +27,15 @@ public interface DaoAccess {
     Long insertTask(Task task);
 
     /**
+     * Insert notification long.
+     *
+     * @param notification the notification
+     * @return the long
+     */
+    @Insert
+    Long insertNotification(Notification notification);
+
+    /**
      * Insert tasks long.
      *
      * @param tasks the tasks
@@ -61,6 +70,14 @@ public interface DaoAccess {
     LiveData<List<Task>> fetchAllTasks();
 
     /**
+     * Fetch all notifications live data.
+     *
+     * @return the live data
+     */
+    @Query("SELECT * FROM Notification ORDER BY id DESC")
+    LiveData<List<Notification>> fetchAllNotifications();
+
+    /**
      * Gets task count.
      *
      * @return the task count
@@ -68,4 +85,9 @@ public interface DaoAccess {
     @Query("SELECT count(*) FROM Task")
     Long getTaskCount();
 
+    /**
+     * Clear tasks.
+     */
+    @Query("DELETE FROM Task")
+    void clearTasks();
 }

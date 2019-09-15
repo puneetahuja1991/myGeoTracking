@@ -11,7 +11,7 @@ import com.abaqustest.mygeotrackingapp.MyGeoTrackingApplication;
  *
  * @author Puneet Ahuja
  */
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class,Notification.class}, version = 1, exportSchema = false)
 public abstract class TasksDatabase extends RoomDatabase {
 
     private static TasksDatabase tasksDatabase;

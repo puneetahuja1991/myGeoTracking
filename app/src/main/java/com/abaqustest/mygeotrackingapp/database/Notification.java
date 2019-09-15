@@ -4,18 +4,21 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
- * The type Task.
+ * The type Notification.
  *
  * @author Puneet Ahuja
  */
 @Entity
-public class Task implements Serializable {
+public class Notification implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String task;
-    private int state;
+    private String message;
+    private String date;
 
     /**
      * Gets id.
@@ -24,25 +27,6 @@ public class Task implements Serializable {
      */
     public int getId() {
         return id;
-    }
-
-
-    /**
-     * Gets task.
-     *
-     * @return the task
-     */
-    public String getTask() {
-        return task;
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public int getState() {
-        return state;
     }
 
     /**
@@ -55,20 +39,52 @@ public class Task implements Serializable {
     }
 
     /**
-     * Sets task.
+     * Gets message.
      *
-     * @param task the task
+     * @return the message
      */
-    public void setTask(String task) {
-        this.task = task;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets state.
+     * Sets message.
      *
-     * @param state the state
+     * @param message the message
      */
-    public void setState(int state) {
-        this.state = state;
+    public void setMessage(String message) {
+        this.message = message;
     }
+
+    /**
+     * Gets date.
+     *
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Sets date.
+     *
+     * @param date the date
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+
+    /**
+     * Gets formatted date.
+     *
+     * @return the formatted date
+     */
+    public String getFormattedDate() {
+        Date date = new Date(Long.valueOf(getDate()));
+        SimpleDateFormat formatter= new SimpleDateFormat("EEE, MMM d 'at' HH:mm:ss" );
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
+        return formatter.format(date);
+    }
+
 }

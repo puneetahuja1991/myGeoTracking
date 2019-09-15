@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="message"
-            type="com.kisantest.contactsapp.database.Message" />
+            name="notification"
+            type="com.abaqustest.mygeotrackingapp.database.Notification" />
     </data>
 
     <LinearLayout
@@ -15,35 +15,21 @@
         android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{message.name}"
-                android:layout_centerVertical="true"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/_15ssp"
-                tools:text="name" />
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@{message.getFormattedDate}"
-                android:textSize="@dimen/_9ssp"
-                tools:text="date"
-                android:layout_alignParentEnd="true"/>
-        </RelativeLayout>
-
         <TextView
-            android:id="@+id/tv_body"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{message.body}"
+            android:text="@{notification.message}"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/_15ssp"
+            tools:text="name" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{notification.formattedDate}"
             android:layout_marginTop="@dimen/_3sdp"
             android:textSize="@dimen/_11ssp"
             tools:text="body" />

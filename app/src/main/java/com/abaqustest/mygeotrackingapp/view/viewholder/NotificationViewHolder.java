@@ -14,41 +14,41 @@
  *
  */
 
-package com.kisantest.contactsapp.view.viewholder;
+package com.abaqustest.mygeotrackingapp.view.viewholder;
 
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kisantest.contactsapp.database.Message;
-import com.kisantest.contactsapp.databinding.ItemMessageBinding;
+import com.abaqustest.mygeotrackingapp.database.Notification;
+import com.abaqustest.mygeotrackingapp.databinding.ItemNotificationBinding;
 
 /**
- * Message view holder.
+ * Notification view holder.
  *
  * @author Puneet Ahuja
  */
-public class MessagesViewHolder extends RecyclerView.ViewHolder {
-    private ItemMessageBinding itemMessageBinding;
+public class NotificationViewHolder extends RecyclerView.ViewHolder {
+    private ItemNotificationBinding itemNotificationBinding;
 
 
     /**
-     * Instantiates a new Messages view holder.
+     * Instantiates a new Notification view holder.
      *
-     * @param itemMessageBinding the item message binding
+     * @param itemNotificationBinding the item notification binding
      */
-    public MessagesViewHolder(ItemMessageBinding itemMessageBinding) {
-        super(itemMessageBinding.getRoot());
-        this.itemMessageBinding = itemMessageBinding;
+    public NotificationViewHolder(ItemNotificationBinding itemNotificationBinding) {
+        super(itemNotificationBinding.getRoot());
+        this.itemNotificationBinding = itemNotificationBinding;
     }
 
 
     /**
      * Bind.
      *
-     * @param mMessage the m message
+     * @param notification the notification
      */
-    public void bind(Message mMessage) {
-        itemMessageBinding.setMessage(mMessage);
+    public void bind(Notification notification) {
+        itemNotificationBinding.setNotification(notification);
     }
 
 }

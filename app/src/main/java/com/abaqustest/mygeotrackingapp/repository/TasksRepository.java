@@ -2,6 +2,10 @@ package com.abaqustest.mygeotrackingapp.repository;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+
+import com.abaqustest.mygeotrackingapp.database.Notification;
 import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.database.TasksDatabase;
 import com.abaqustest.mygeotrackingapp.network.ApiInterface;
@@ -13,9 +17,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,8 +47,8 @@ public class TasksRepository {
      * @param isRefreshForcefully the is refresh forcefully
      */
     public void getTaskList(@NonNull GenericResponseListener<List<Task>> listener, boolean isRefreshForcefully) {
-        if(isRefreshForcefully)
-            getTaskFromServer(listener);
+        if (isRefreshForcefully)
+            getTaskFromServer(listener, false);
         else
             fetchTasks(listener);
     }
@@ -55,19 +56,21 @@ public class TasksRepository {
     /**
      * Gets task from server.
      *
-     * @param listener the listener
+     * @param listener          the listener
+     * @param isWorkManagerCall the is work manager call
      */
-    private void getTaskFromServer(@NonNull GenericResponseListener<List<Task>> listener) {
+    public void getTaskFromServer(@NonNull GenericResponseListener<List<Task>> listener, boolean isWorkManagerCall) {
         Call<List<Task>> call1 = apiInterface.getTasksList();
         call1.enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
-                    deleteTasks(response.body());
-                }else {
+                    if (!isWorkManagerCall)
+                        deleteTasks(response.body());
+                } else {
                     try {
-                        JSONObject errorObject  = new JSONObject(response.errorBody().string());
+                        JSONObject errorObject = new JSONObject(response.errorBody().string());
                         listener.onError(errorObject.optString("message"));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -78,9 +81,10 @@ public class TasksRepository {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                if(t instanceof IOException)
+                if (t instanceof IOException)
                     listener.onError("Please check your internet connection");
                 else
                     listener.onError("Something went wrong");
@@ -128,7 +132,7 @@ public class TasksRepository {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                tasksDatabase.clearAllTables();
+                tasksDatabase.daoAccess().clearTasks();
                 return null;
             }
 
@@ -142,6 +146,7 @@ public class TasksRepository {
 
     /**
      * Fetch tasks.
+     *
      * @param listener
      */
     private void fetchTasks(@NonNull GenericResponseListener<List<Task>> listener) {
@@ -155,8 +160,8 @@ public class TasksRepository {
             @Override
             protected void onPostExecute(Long count) {
                 super.onPostExecute(count);
-                if(count == 0)
-                    getTaskFromServer(listener);
+                if (count == 0)
+                    getTaskFromServer(listener,false);
                 else
                     fetchTasksFromDB(listener);
             }
@@ -173,14 +178,14 @@ public class TasksRepository {
         new AsyncTask<Void, Void, List<Task>>() {
             @Override
             protected List<Task> doInBackground(Void... voids) {
-                List<Task> tasks= tasksDatabase.daoAccess().fetchAllTasks().getValue();
+                List<Task> tasks = tasksDatabase.daoAccess().fetchAllTasks().getValue();
                 return tasks;
             }
 
             @Override
             protected void onPostExecute(List<Task> tasks) {
                 super.onPostExecute(tasks);
-               listener.onSuccess(tasks);
+                listener.onSuccess(tasks);
 
             }
         }.execute();
@@ -204,7 +209,7 @@ public class TasksRepository {
      *
      * @return the live data
      */
-    public LiveData<List<Task>> getTasksLiveData(){
+    public LiveData<List<Task>> getTasksLiveData() {
         return tasksDatabase.daoAccess().fetchAllTasks();
     }
 
@@ -236,5 +241,43 @@ public class TasksRepository {
                 return null;
             }
         }.execute();
+    }
+
+    /**
+     * Insert notification to db.
+     *
+     * @param message the message
+     * @param date    the date
+     */
+    public void insertNotificationToDb(String message, String date){
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setDate(date);
+        insertNotification(notification);
+    }
+
+
+    /**
+     * Insert notification.
+     *
+     * @param notification the notification
+     */
+    private void insertNotification(Notification notification) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                tasksDatabase.daoAccess().insertNotification(notification);
+                return null;
+            }
+        }.execute();
+    }
+
+    /**
+     * Gets notification live data.
+     *
+     * @return the notification live data
+     */
+    public LiveData<List<Notification>> getNotificationLiveData() {
+        return tasksDatabase.daoAccess().fetchAllNotifications();
     }
 }

@@ -10,6 +10,7 @@ import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutTasksFragmentBinding;
 import com.abaqustest.mygeotrackingapp.utils.Utils;
 import com.abaqustest.mygeotrackingapp.utils.helper.DividerItemsDecoration;
+import com.abaqustest.mygeotrackingapp.view.activity.MainActivity;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.view.dialog.AddNewTaskDialogFragment;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
@@ -101,6 +102,7 @@ public class PendingTaskFragment extends BaseFragment<LayoutTasksFragmentBinding
 
     @Override
     public void updateTask(Task task) {
+        ((MainActivity)getActivity()).showUndoDeleteMessage(task);
         mainViewModel.updateTask(task);
     }
 }

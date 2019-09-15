@@ -3,45 +3,77 @@ package com.abaqustest.mygeotrackingapp.worker;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.media.RingtoneManager;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.abaqustest.mygeotrackingapp.R;
+import com.abaqustest.mygeotrackingapp.database.Task;
+import com.abaqustest.mygeotrackingapp.repository.TasksRepository;
+import com.abaqustest.mygeotrackingapp.utils.helper.GenericResponseListener;
 
-public class NotificationWorker extends Worker {
-    private static final String WORK_RESULT = "work_result";
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Worker Manager Class which runs in background and gets the latest task data from server.
+ *
+ * @author Puneet Ahuja
+ */
+public class TaskWorker extends Worker {
 
-    public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    private TasksRepository mTasksRepository;
+
+    /**
+     * Instantiates a new Task worker.
+     *
+     * @param context      the context
+     * @param workerParams the worker params
+     */
+    public TaskWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        mTasksRepository = new TasksRepository();
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        Data taskData = getInputData();
-        String taskDataString = "task data";
+        mTasksRepository.getTaskFromServer(new GenericResponseListener<List<Task>>() {
+            @Override
+            public void onError(String error) {
+                //Handle Error if required.
+            }
 
-        showNotification("WorkManager", taskDataString != null ? taskDataString : "Message has been Sent");
+            @Override
+            public void onSuccess(List<Task> response) {
+                if(response != null && response.size()> 0)
+                    showNotification(response);
+            }
+        },true);
 
-        Data outputData = new Data.Builder().putString(WORK_RESULT, "Jobs Finished").build();
-
-        return Result.success(outputData);
+        return Result.success();
 
     }
 
-    private void showNotification(String task, String desc) {
+    /**
+     * Show notification.
+     *
+     * @param response the response
+     */
+    private void showNotification(List<Task> response) {
 
         NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-
+        String title = "Task Status";
         String channelId = "task_channel";
         String channelName = "task_name";
+        String message = getNotificationMessage(response);
+
+        mTasksRepository.insertNotificationToDb(message, String.valueOf(System.currentTimeMillis()));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -51,11 +83,35 @@ public class NotificationWorker extends Worker {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                .setContentTitle(task)
-                .setContentText(desc)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSmallIcon(R.mipmap.ic_launcher);
 
-        manager.notify(1, builder.build());
+        manager.notify((int) System.currentTimeMillis(), builder.build());
+
+    }
+
+    /**
+     * Gets notification message.
+     *
+     * @param response the response
+     * @return the notification message
+     */
+    private String getNotificationMessage(List<Task> response) {
+        List<Task> pendingTask=new ArrayList<>();
+        List<Task> doneTask=new ArrayList<>();
+
+        for(int i=0; i<response.size();i++) {
+            if(response.get(i).getState()==0) {
+                pendingTask.add(response.get(i));
+            }else if(response.get(i).getState()==1) {
+                doneTask.add(response.get(i));
+            }
+        }
+
+        return pendingTask.size() + " Pending  & " + doneTask.size() + " Done ";
 
     }
 

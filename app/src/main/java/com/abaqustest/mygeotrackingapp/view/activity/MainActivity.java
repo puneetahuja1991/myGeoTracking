@@ -1,6 +1,9 @@
 package com.abaqustest.mygeotrackingapp.view.activity;
 
-import android.view.View;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -8,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseActivity;
+import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.databinding.ActivityMainBinding;
 import com.abaqustest.mygeotrackingapp.view.adapter.SectionsPagerAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
@@ -91,18 +95,37 @@ public class MainActivity  extends BaseActivity<ActivityMainBinding> implements 
     /**
      * Show undo delete message.
      *
-     * @param view the view
+     * @param task the task
      */
-    public void showUndoDeleteMessage(View view) {
-        Snackbar.make(view, "Task Updated", Snackbar.LENGTH_SHORT)
-                .setAction("Cancel", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Undo delete operation
-                    }
+    public void showUndoDeleteMessage(Task task) {
+        Snackbar.make(mBinding.viewSnack, "Task Updated", Snackbar.LENGTH_SHORT)
+                .setAction("Cancel", v -> {
+                    if(task.getState() == 0)
+                        task.setState(1);
+                    else
+                        task.setState(0);
+                    mainViewModel.updateTask(task);
                 })
                 .setDuration(5000)
                 .setActionTextColor(getResources().getColor(R.color.colorAccent))
                 .show();
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_notifications:
+                startActivity(new Intent(MainActivity.this,NotificationsActivity.class));
+                break;
+        }
+        return false;
+    }
+
 }

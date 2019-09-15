@@ -3,13 +3,14 @@ package com.abaqustest.mygeotrackingapp.view.fragment;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.abaqustest.mygeotrackingapp.R;
 import com.abaqustest.mygeotrackingapp.base.BaseFragment;
 import com.abaqustest.mygeotrackingapp.database.Task;
 import com.abaqustest.mygeotrackingapp.databinding.LayoutDoneTaskFragmentBinding;
+import com.abaqustest.mygeotrackingapp.utils.helper.DividerItemsDecoration;
 import com.abaqustest.mygeotrackingapp.view.activity.MainActivity;
 import com.abaqustest.mygeotrackingapp.view.adapter.TasksAdapter;
 import com.abaqustest.mygeotrackingapp.viewmodel.MainViewModel;
@@ -63,11 +64,15 @@ public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding
      * @param doneTasks
      */
     private void setUpDoneTasksAdapter(List<Task> doneTasks) {
-        doneTasksAdapter = new TasksAdapter(doneTasks,this);
-        mBinding.rvTasks.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mBinding.rvTasks.setAdapter(doneTasksAdapter);
-        mBinding.rvTasks.setLayoutManager(layoutManager);
+        if(doneTasksAdapter == null){
+            doneTasksAdapter = new TasksAdapter(doneTasks,this);
+            mBinding.rvTasks.setItemAnimator(new DefaultItemAnimator());
+            mBinding.rvTasks.addItemDecoration(new DividerItemsDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+            mBinding.rvTasks.setAdapter(doneTasksAdapter);
+            mBinding.rvTasks.setLayoutManager(layoutManager);
+        }else
+            doneTasksAdapter.setTasks(doneTasks);
     }
 
     @Override
@@ -83,6 +88,7 @@ public class DoneTaskFragment extends BaseFragment<LayoutDoneTaskFragmentBinding
 
     @Override
     public void updateTask(Task task) {
+        ((MainActivity)getActivity()).showUndoDeleteMessage(task);
         mainViewModel.updateTask(task);
     }
 }
